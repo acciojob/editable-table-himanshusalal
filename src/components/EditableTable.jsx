@@ -2,14 +2,13 @@ import React, { useState, useRef } from "react";
 
 const EditableTable = () => {
   const [rows, setRows] = useState([
-    { id: 1, name: "Shyam", age: 25 },
-    { id: 2, name: "Ali", age: 30 },
-    { id: 3, name: "Shaw", age: 35 },
-    { id: 4, name: "Shaw", age: 20 },
-    { id: 5, name: "Tavneet", age: 50 },
-    { id: 6, name: "Lakshmi", age: 40 },
-  ]);
-
+  { id: 1, name: "Ram", age: 25 },
+  { id: 2, name: "Shyam", age: 30 },
+  { id: 3, name: "Ali", age: 35 },
+  { id: 4, name: "Shaw", age: 20 },
+  { id: 5, name: "Tavneet", age: 50 },
+  { id: 6, name: "Lakshmi", age: 40 },
+]);
   const editedRows = useRef([]);
 
   const handleChange = (id, field, value) => {
