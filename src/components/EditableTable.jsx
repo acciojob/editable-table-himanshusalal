@@ -2,21 +2,22 @@ import React, { useState, useRef } from "react";
 
 const EditableTable = () => {
   const [rows, setRows] = useState([
-    { name: "1", age: "2" },
-    { name: "3", age: "4" },
-    { name: "5", age: "6" },
+    ["1", "2"],
+    ["3", "4"],
+    ["5", "6"],
   ]);
 
   const editedRows = useRef([]);
 
-  const handleChange = (index, field, value) => {
-    const updated = [...rows];
+  const handleChange = (rowIndex, colIndex, value) => {
+    const updatedRows = rows.map((row) => [...row]);
+    updatedRows[rowIndex][colIndex] = value;
+    setRows(updatedRows);
 
-    updated[index][field] = value;
-    setRows(updated);
+    const cellNumber = rowIndex * 2 + colIndex + 1;
 
-    if (!editedRows.current.includes(index + 1)) {
-      editedRows.current.push(index + 1);
+    if (!editedRows.current.includes(cellNumber)) {
+      editedRows.current.push(cellNumber);
     }
   };
 
@@ -29,27 +30,19 @@ const EditableTable = () => {
     <form onSubmit={handleSubmit}>
       <table>
         <tbody>
-          {rows.map((row, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  type="text"
-                  value={row.name}
-                  onChange={(e) =>
-                    handleChange(index, "name", e.target.value)
-                  }
-                />
-              </td>
-
-              <td>
-                <input
-                  type="number"
-                  value={row.age}
-                  onChange={(e) =>
-                    handleChange(index, "age", e.target.value)
-                  }
-                />
-              </td>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((value, colIndex) => (
+                <td key={colIndex}>
+                  <input
+                    type={colIndex === 0 ? "text" : "number"}
+                    value={value}
+                    onChange={(e) =>
+                      handleChange(rowIndex, colIndex, e.target.value)
+                    }
+                  />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
