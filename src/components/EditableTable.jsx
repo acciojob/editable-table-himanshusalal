@@ -2,22 +2,22 @@ import React, { useState, useRef } from "react";
 
 const EditableTable = () => {
   const [rows, setRows] = useState([
-    ["1", "2"],
-    ["3", "4"],
-    ["5", "6"],
+    { id: 1, name: "John", age: 25 },
+    { id: 2, name: "Jane", age: 30 },
+    { id: 3, name: "Bob", age: 35 },
   ]);
 
   const editedRows = useRef([]);
 
-  const handleChange = (rowIndex, colIndex, value) => {
-    const updatedRows = rows.map((row) => [...row]);
-    updatedRows[rowIndex][colIndex] = value;
-    setRows(updatedRows);
+  const handleChange = (rowId, field, value) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === rowId ? { ...row, [field]: value } : row
+      )
+    );
 
-    const cellNumber = rowIndex * 2 + colIndex + 1;
-
-    if (!editedRows.current.includes(cellNumber)) {
-      editedRows.current.push(cellNumber);
+    if (!editedRows.current.includes(rowId)) {
+      editedRows.current.push(rowId);
     }
   };
 
@@ -30,25 +30,33 @@ const EditableTable = () => {
     <form onSubmit={handleSubmit}>
       <table>
         <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((value, colIndex) => (
-                <td key={colIndex}>
-                  <input
-                    type={colIndex === 0 ? "text" : "number"}
-                    value={value}
-                    onChange={(e) =>
-                      handleChange(rowIndex, colIndex, e.target.value)
-                    }
-                  />
-                </td>
-              ))}
+          {rows.map((row) => (
+            <tr key={row.id}>
+              <td>
+                <input
+                  type="text"
+                  value={row.name}
+                  onChange={(e) =>
+                    handleChange(row.id, "name", e.target.value)
+                  }
+                />
+              </td>
+
+              <td>
+                <input
+                  type="number"
+                  value={row.age}
+                  onChange={(e) =>
+                    handleChange(row.id, "age", e.target.value)
+                  }
+                />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button type="submit">Submit</button>
+      <button type="submit">Save</button>
     </form>
   );
 };
